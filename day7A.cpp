@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -16,43 +17,53 @@ int main(){
 	if (myfile.is_open()){
    		
    		while ( getline (myfile,line) ){
+            //line = "hello[how]are[you]doing";
 
    			//cout << line 
 
    			//split the string into three sections
    			int startplace = 0;
 
-   			string str1;
-   			string str2;
-   			string str3;
+   			vector<string> stroutside;
+            vector<string> strinside;
 
    			for (int i = 0; i < line.length(); i++){
    				if (line[i] == '['){
-   					str1 = line.substr(startplace, i - startplace);
+   					string str1 = line.substr(startplace, i - startplace);
+                  stroutside.push_back(str1);
    					startplace = i + 1;
+                  cout << str1 << "\n";
    				}
    				if (line[i] == ']'){
-   					str2 = line.substr(startplace, i - startplace);
-   					str3 = line.substr(i + 1);
-   					break;
+   					string str1 = line.substr(startplace, i - startplace);
+                  strinside.push_back(str1);
+   					startplace = i + 1;
+                  cout << str1 << "\n";
    				}
+               if (i == line.length() - 1){
+                  string str1 = line.substr(startplace, i + 1 - startplace);
+                  stroutside.push_back(str1);
+                  cout << str1 << "\n";
+               }
    			}
 
    			//cout << str1 << " " << str2 << " " << str3;
 
-   			bool abba_1_3;
-   			bool abba2;
+   			bool abba_outside = 0;
+   			bool abba_inside = 0;;
 
-   			abba2 = abba(str2);
+   			for (int i = 0; i < stroutside.size(); i++){
+               abba_outside = abba_outside || abba(stroutside[i]);
+            }
 
-   			abba_1_3 = abba(str1) || abba(str3);
+            for (int i = 0; i < strinside.size(); i++){
+               abba_inside = abba_inside || abba(strinside[i]);
+            }
 
-   			if ( !abba2 && abba_1_3){
+   			if ( !abba_inside && abba_outside){
                cout << line << "\n";
    				ipcount++;
    			}
-
-   			//break;
 
    		}
    	}
@@ -69,4 +80,22 @@ bool abba(string strpart){
    		}
    	}
    	return 0;
+}
+
+bool aba(string strpart){
+   for (int i = 0; i < strpart.length() - 3; i++ ){
+         if (strpart[i] == strpart[i + 3] && strpart[i + 1] == strpart[i + 2] && strpart[i] != strpart[i+1]){
+            return 1;
+         }
+      }
+      return 0;
+}
+
+bool bab(string strpart){
+   for (int i = 0; i < strpart.length() - 3; i++ ){
+         if (strpart[i] == strpart[i + 3] && strpart[i + 1] == strpart[i + 2] && strpart[i] != strpart[i+1]){
+            return 1;
+         }
+      }
+      return 0;
 }
